@@ -8,21 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    // var name: String = "Ken"
-    // var greeting: String {
-    //     "hi, \(name)"
-    // }
-    
-    // var emojis: Array<String> = ["A","B","C","D","E"]
-    // var emojis: [String] = ["A","B","C","D","E"]
-    // var emojis = ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🫎","🐲","🐥","🐙","🪼","🦭","🦧","🦚","🦦","🦥"]
-    
-    // @State var emojiCount = 20
-    
     var viewModel: EmojiMemoryGame
     
     var body: some View {
         VStack {
+            // 新增：明顯的顏色與大小呈現目前得分
+            Text("Score: \(viewModel.score)")
+                .font(.system(size: 40, weight: .bold)) // 大小明顯
+                .foregroundStyle(.red) // 顏色明顯
+                .padding(.bottom, 10)
+            
             cardList
                 .animation(.default, value: viewModel.cards)
             Spacer()
@@ -30,7 +25,6 @@ struct ContentView: View {
                 viewModel.shuffle()
             }
             .font(.largeTitle)
-            // actionButtons
         }
         .padding()
         .foregroundStyle(.orange)
@@ -53,16 +47,11 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-//    @State var isFaceUp: Bool = true
-//    var content: String
-    
     var card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack {
-            // var shape: RoundedRectangle = RoundedRectangle(cornerRadius: 20)
             let shape = RoundedRectangle(cornerRadius: 20)
-            // var shape = Circle();
             
             Group {
                 shape.fill(.white)
@@ -78,14 +67,9 @@ struct CardView: View {
             
         }
         .opacity(card.isMatched && !card.isFaceUp ? 0 : 1)
-        
-        // .onTapGesture(perform: {
-        //     isFaceUp = !isFaceUp
-        // })
     }
 }
 
 #Preview {
     ContentView(viewModel: EmojiMemoryGame())
-    
 }

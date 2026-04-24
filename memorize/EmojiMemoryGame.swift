@@ -1,5 +1,5 @@
 //
-//  EmojiMemoryGame`.swift
+//  EmojiMemoryGame.swift
 //  memorize
 //
 //  Created by mis11344114 on 2026/3/30.
@@ -9,9 +9,6 @@ import Foundation
 
 @Observable
 class EmojiMemoryGame {
-//    private var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4,
-//        createCardContent: createCardContent)
-    
     private static var emojis = ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🫎","🐲","🐥","🐙","🪼","🦭","🦧","🦚","🦦","🦥"]
     
     private static func createMemoryGame() -> MemoryGame<String> {
@@ -21,9 +18,13 @@ class EmojiMemoryGame {
     
     private var model: MemoryGame<String> = createMemoryGame()
 
-    
     var cards: [MemoryGame<String>.Card] {
         model.cards
+    }
+    
+    // 新增：將分數開放給 View 讀取
+    var score: Int {
+        model.score
     }
     
     // MARK: - intent

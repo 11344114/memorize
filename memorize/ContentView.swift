@@ -12,22 +12,63 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            // 新增：明顯的顏色與大小呈現目前得分
-            Text("Score: \(viewModel.score)")
-                .font(.system(size: 40, weight: .bold)) // 大小明顯
-                .foregroundStyle(.red) // 顏色明顯
-                .padding(.bottom, 10)
+            // 頂部資訊區塊
+            HStack {
+                // 新增：在任意區塊新增顯示目前選取的 Theme name
+                Text(viewModel.themeName)
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
+                
+                Spacer()
+                
+                Text("Score: \(viewModel.score)")
+                    .font(.system(size: 30, weight: .bold)) // 稍微縮小以配合主題標題
+                    .foregroundStyle(.red)
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
             
             cardList
                 .animation(.default, value: viewModel.cards)
+            
             Spacer()
-            Button("Shuffle") {
-                viewModel.shuffle()
+            
+            // 底部按鈕區塊
+            HStack {
+                // 原本的洗牌按鈕稍微調整樣式以與 New Game 匹配
+                Button(action: {
+                    viewModel.shuffle()
+                }) {
+                    VStack {
+                        Image(systemName: "shuffle")
+                            .font(.largeTitle)
+                        Text("Shuffle")
+                            .font(.body)
+                    }
+                }
+                .foregroundStyle(.red) // 修改：固定為紅色，不隨主題改變
+                
+                Spacer()
+                
+                // 新增：新遊戲按鈕 (包含文字與 SF Symbol，上下排列，不同大小)
+                Button(action: {
+                    viewModel.newGame()
+                }) {
+                    VStack {
+                        Image(systemName: "play.circle.fill") // SF Symbol
+                            .font(.system(size: 40))         // 圖示較大
+                        Text("新遊戲")                     // 文字
+                            .font(.headline)                 // 文字較小
+                    }
+                }
+                .foregroundStyle(.red) // 修改：固定為紅色，不隨主題改變
             }
-            .font(.largeTitle)
+            .padding(.horizontal, 40)
+            .padding(.top, 10)
         }
         .padding()
-        .foregroundStyle(.orange)
+        // 新增：卡片背面的顏色根據 Theme 設定的 color (這會套用到裡面所有預設的前景色，包含卡片背面)
+        .foregroundStyle(viewModel.themeColor)
     }
 
     var cardList: some View {

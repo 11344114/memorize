@@ -22,10 +22,39 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         shuffle()
     }
     
-    var lastFaceUpIndex: Int?
+    var lastFaceUpIndex: Int? {
+        get { cards.indices.filter ({ cards[$0].isFaceUp }) .oneAndOnly }
+            // var faceupIndices = [Int]()
+            // for i in cards.indices {
+            //     if cards[i].isFaceUp {
+            //         faceupIndices.append(i)
+            //     }
+            // }
+            
+            // if faceupIndices.count == 1 {
+            //     return faceupIndices[0]
+            // }
+            // else {
+            //     return nil
+            // }
+        set { cards.indices.forEach ({ cards[$0].isFaceUp = $0 == newValue }) }
+            
+            // for i in cards.indices {
+                // cards[i].isFaceUp = i == newValue
+                // if i == newValue {
+                //     cards[i].isFaceUp = true
+                // } else {
+                //     cards[i].isFaceUp = false
+                // }
+        }
     
     mutating func choose(_ card: Card) {
-        if let chosenIndex = index(of: card), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched {
+        // 新增防呆：確保選中的卡片不是已經翻開的，也不是已經配對成功的，避免重複計分或自己跟自己配對
+        if let chosenIndex = cards.indices.firstIndex(where: {cards[$0].id == card.id }) {
+            
+            if cards [chosenIndex].isFaceUp || cards[chosenIndex].isMatched {
+                return
+            }
             
             if let lastIndex = lastFaceUpIndex {
                 if cards[lastIndex].content == cards[chosenIndex].content {
@@ -44,25 +73,16 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 cards[lastIndex].hasBeenSeen = true
                 cards[chosenIndex].hasBeenSeen = true
                 
-                lastFaceUpIndex = nil
+                // lastFaceUpIndex = nil
+                cards[chosenIndex].isFaceUp = true
+                
             } else {
-                for i in 0..<cards.count {
-                    cards[i].isFaceUp = false
-                }
+
                 lastFaceUpIndex = chosenIndex
             }
-            cards[chosenIndex].isFaceUp.toggle()
+            
         }
         print("cards: \(cards), score: \(score)")
-    }
-    
-    func index(of card: Card) -> Int? {
-        for i in 0..<cards.count {
-            if cards[i].id == card.id {
-                return i
-            }
-        }
-        return nil
     }
     
     mutating func shuffle() {
@@ -81,5 +101,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         var content: CardContent
         
         var id: String
+    }
+}
+
+extension Array {
+    var oneAndOnly: Element? {
+        return count == 1 ? first : nil
     }
 }

@@ -21,7 +21,7 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                Text("Score: \(viewModel.score)")
+                Text("目前得分: \(viewModel.score)")
                     .font(.system(size: 30, weight: .bold)) // 稍微縮小以配合主題標題
                     .foregroundStyle(.red)
             }
@@ -35,19 +35,17 @@ struct ContentView: View {
             
             // 底部按鈕區塊
             HStack {
-                // 原本的洗牌按鈕稍微調整樣式以與 New Game 匹配
                 Button(action: {
                     viewModel.shuffle()
                 }) {
                     VStack {
-                        Image(systemName: "shuffle")
-                            .font(.largeTitle)
                         Text("Shuffle")
-                            .font(.body)
+                        .font(.largeTitle)
                     }
                 }
-                .foregroundStyle(.red) // 修改：固定為紅色，不隨主題改變
-                
+                .foregroundStyle(.red) // 修改：固定為紅色，不隨主題改變  
+                .fontWeight(.bold)
+
                 Spacer()
                 
                 // 新增：新遊戲按鈕 (包含文字與 SF Symbol，上下排列，不同大小)
